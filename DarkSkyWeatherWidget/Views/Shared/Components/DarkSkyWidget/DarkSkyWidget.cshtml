@@ -1,0 +1,61 @@
+﻿@model DarkSky.Models.DarkSkyResponse
+@if (Model.Response != null)
+{
+	string day1 = Model.Response.Daily.Data[1].DateTime.Date.Day + "." + Model.Response.Daily.Data[1].DateTime.Date.Month + "." + Model.Response.Daily.Data[1].DateTime.Date.Year;
+	string day2 = Model.Response.Daily.Data[2].DateTime.Date.Day + "." + Model.Response.Daily.Data[2].DateTime.Date.Month + "." + Model.Response.Daily.Data[2].DateTime.Date.Year;
+	string day3 = Model.Response.Daily.Data[3].DateTime.Date.Day + "." + Model.Response.Daily.Data[3].DateTime.Date.Month + "." + Model.Response.Daily.Data[3].DateTime.Date.Year;
+	<article>
+		<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-right:0;padding-left:10%;">
+				<pre><canvas id="icon1" style="width:100%;"></canvas></pre>
+			</div>
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-left:0; margin-bottom:12px;">
+				<h1>BURSA</h1>
+				<h2>@Model.Response.Currently.Temperature&ordm;</h2>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 float-left" style="padding:0;"><q>@Model.Response.Currently.Summary</q></div>
+			</div>
+			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin-bottom:12px;"><i><q>@Model.Response.Daily.Summary</q></i></div>
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><canvas id="day1" style="width:100%;"></canvas></div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">@day1</div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding:0;"><q>@Model.Response.Daily.Data[1].Summary</q></div>
+			</div>
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><canvas id="day2" style="width:100%;"></canvas></div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">@day2</div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding:0;"><q>@Model.Response.Daily.Data[2].Summary</q></div>
+
+			</div>
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><canvas id="day3" style="width:100%;"></canvas></div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">@day3</div>
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding:0;"><q>@Model.Response.Daily.Data[3].Summary</q></div>
+			</div>
+		</div>
+	</article>
+
+	<script src="~/js/SkyCons/skycons.js"></script>
+
+	<script>
+	var currently = '@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Response.Currently)';
+	currently = currently.replace(/&quot;/g, '"');
+	currently = currently.replace(/&#x2B;/g, ' ');
+	currently = JSON.parse(currently)
+
+	var Daily = '@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Response.Daily)';
+	Daily = Daily.replace(/&quot;/g, '"');
+	Daily = Daily.replace(/&#x2B;/g, ' ');
+	Daily = JSON.parse(Daily)
+
+	var skycons = new Skycons({ "color": "black" });
+
+	skycons.set("icon1", currently.icon);
+	skycons.set("day1", Daily.data[1].icon);
+	skycons.set("day2", Daily.data[2].icon);
+	skycons.set("day3", Daily.data[3].icon);
+
+	skycons.play();
+	</script>
+}
+
+
